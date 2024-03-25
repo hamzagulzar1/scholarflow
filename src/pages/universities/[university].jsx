@@ -1,101 +1,152 @@
-// File: /pages/universities/[university].jsx
+import { useRouter } from "next/router";
+import { useState, useEffect, useRef } from "react";
+import "@/app/globals.css";
 
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import Accordian from "@/components/Accordian";
+const tabs = ["Overview", "Programs", "Academic Fields"];
 
-const tabs = ['Overview', 'Programs', 'Academic Fields'];
+const UniversityPage = ({ params }) => {
+	const router = useRouter();
+	const { university } = router.query;
+	const [activeTab, setActiveTab] = useState(tabs[0]);
+	const [universityData, setUniversityData] = useState({});
 
-const UniversityPage = () => {
-  const router = useRouter();
-  const { university } = router.query;
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [universityData, setUniversityData] = useState({});
+	const tickRef = useRef(
+		<svg
+			class="w-3 h-3 text-green-500"
+			aria-hidden="true"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 16 12"
+		>
+			<path
+				stroke="currentColor"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M1 5.917 5.724 10.5 15 1.5"
+			/>
+		</svg>
+	);
 
-  // Fetch university data when the component mounts or when the active tab changes
-  useEffect(() => {
-    if (!university) return;
+	const crossRef = useRef(
+		<svg
+			class="w-3 h-3 text-red-500"
+			aria-hidden="true"
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 14 14"
+		>
+			<path
+				stroke="currentColor"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+			/>
+		</svg>
+	);
 
-    const fetchUniversityData = async () => {
-      const response = await fetch(`/api/universities?name=${encodeURIComponent(university)}`);
-      const data = await response.json();
-      setUniversityData(data);
-    };
+	// Fetch university data when the component mounts or when the active tab changes
+	useEffect(() => {
+		if (!university) return;
 
-    fetchUniversityData();
-  }, [university]);
+		const fetchUniversityData = async () => {
+			const response = await fetch(`/api/universities?name=${encodeURIComponent(university)}`);
+			const data = await response.json();
+			setUniversityData(data);
+		};
 
-  // Function to handle clicking a tab
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-  const renderDegrees = (degrees) => {
-    return Object.entries(degrees).map(([degree, isOffered]) => (
-      <li key={degree}>{degree}: {isOffered ? 'Available' : 'Not available'}</li>
-    ));
-  };
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-4">{universityData.university_name}</h1>
-      {/* Tab navigation */}
-      <div className="mb-4">
-        {tabs.map((tab, index) => (
-          <button
-            key={index}
-            className={`px-4 py-2 mr-2 ${
-              activeTab === tab ? 'text-blue-500 border-b-2 border-blue-500' : ''
-            }`}
-            onClick={() => handleTabClick(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-      {/* Tab content */}
-      <div>
-        {activeTab === 'Overview' && (
-          <div>
-            {/* Render overview content here */}
-            {/* Since overview should show everything, you can iterate over each key in the data */}
-            {Object.keys(universityData).map((key) => {
-              if (key === '_id') return null; // skip id
-              return (
-                <div key={key}>
-                  <h2 className="text-2xl font-semibold mt-2">{key.replace('_', ' ')}</h2>
-                  <p>{JSON.stringify(universityData[key], null, 2)}</p>
-                </div>
-              );
-            })}
-          </div>
-        )}
-        {activeTab === 'Programs' && (
-          <div>
-            <h2 className="text-2xl font-semibold mt-2">Programs offered</h2>
-            {/* Map over the programs and display them */}
-            {universityData.programs?.map((program, index) => (
-              <div key={index} className="mt-1">
-                {Object.entries(program).map(([field, value], subIndex) => (
-                  <p key={subIndex}>
-                    <strong>{field.replace('_', ' ')}:</strong> {value.toString()}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
-        {activeTab === 'Academic Fields' && (
-          <div>
-            <h2 className="text-2xl font-semibold mt-2">Academic Fields</h2>
-            {/* Display academic fields content here */}
-            {Object.entries(universityData.academic_fields || {}).map(([degree, field], index) => (
-              <div key={index} className="mt-1">
-                <strong>{degree.replace('_', ' ')}:</strong> {field}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+		fetchUniversityData();
+	}, [university]);
+
+	// Function to handle clicking a tab
+	const handleTabClick = (tab) => {
+		setActiveTab(tab);
+	};
+	const renderDegrees = (degrees) => {
+		return Object.entries(degrees).map(([degree, isOffered]) => (
+			<li key={degree}>
+				{degree}: {isOffered ? "Available" : "Not available"}
+			</li>
+		));
+	};
+	return (
+		<div className="container mx-auto p-4">
+			<h1 className="text-4xl font-bold mb-4">{universityData.university_name}</h1>
+			{/* Tab navigation */}
+			<div className="mb-4">
+				{tabs.map((tab, index) => (
+					<button
+						key={index}
+						className={`px-4 py-2 mr-2 ${activeTab === tab ? "text-blue-500 border-b-2 border-blue-500" : ""}`}
+						onClick={() => handleTabClick(tab)}
+					>
+						{tab}
+					</button>
+				))}
+			</div>
+			{/* Tab content */}
+			<div>
+				{activeTab === "Overview" && (
+					<>
+						<div>
+							{/* Render overview content here */}
+							{/* Since overview should show everything, you can iterate over each key in the data */}
+							{Object.keys(universityData).map((key) => {
+								if (key === "_id") return null; // skip id
+								return (
+									<div key={key}>
+										<h2 className="text-2xl font-semibold mt-2">{key.replace("_", " ")}</h2>
+										<p>{JSON.stringify(universityData[key], null, 2)}</p>
+									</div>
+								);
+							})}
+						</div>
+					</>
+				)}
+				{activeTab === "Programs" && (
+					<div className="relative overflow-x-auto">
+						<table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+								<tr>
+									<th scope="col" className="px-6 py-3">
+										Programs Offered
+									</th>
+									<th scope="col" className="px-6 py-3">
+										Bachelors
+									</th>
+									<th scope="col" className="px-6 py-3">
+										Masters
+									</th>
+									<th scope="col" className="px-6 py-3">
+										PHD
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{universityData.programs?.map((program, index) => (
+									<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+										<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+											{program.field_of_study}
+										</th>
+										<td className="px-6 py-4">
+											{program.degrees_offered.Bachelor ? tickRef.current : crossRef.current}
+										</td>
+										<td className="px-6 py-4">{program.degrees_offered.Master ? tickRef.current : crossRef.current}</td>
+										<td className="px-6 py-4">
+											{program.degrees_offered.Doctoral ? tickRef.current : crossRef.current}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				)}
+				{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
+			</div>
+		</div>
+	);
 };
 
 export default UniversityPage;
