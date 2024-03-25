@@ -1,9 +1,11 @@
 // File: /pages/api/universities.js
 
-import { MongoClient } from 'mongodb';
+//import { MongoClient } from 'mongodb';
 
-// Replace the below URI with your actual MongoDB URI
-const uri = 'mongodb://localhost:27017';
+require('dotenv').config(); // Make sure to require dotenv at the top
+const { MongoClient } = require('mongodb');
+
+const uri = process.env.MONGO_URI; // Retrieve the URI from your .env file
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function handler(req, res) {

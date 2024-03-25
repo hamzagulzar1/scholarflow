@@ -1,8 +1,9 @@
 // C:\Users\Gulzar\scholarflow2\src\lib\mongodb.js
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-const uri = "mongodb://localhost:27017";
-const dbName = "test";
+const uri = process.env.MONGO_URI; // Retrieve the URI from your .env file
+const dbName = "test"; // This should match the database name in your Atlas cluster
 
 let cachedClient = null;
 let cachedDb = null;
