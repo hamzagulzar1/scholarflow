@@ -1,11 +1,15 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
+import { getDegreeCounts , getProgramCount , getTop5Programs } from "@/utils/programs";
 import "@/app/globals.css";
 
 import Accordian from "@/components/Accordian";
+import DegreesPieChart from "@/components/DegreesPieChart";
+import OverviewCard from "@/components/OverviewCard";
+
 const tabs = ["Overview", "Programs", "Academic Fields"];
 
-const UniversityPage = ({ params }) => {
+const UniversityPage = () => {
 	const router = useRouter();
 	const { university } = router.query;
 	const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -64,6 +68,7 @@ const UniversityPage = ({ params }) => {
 	const handleTabClick = (tab) => {
 		setActiveTab(tab);
 	};
+
 	const renderDegrees = (degrees) => {
 		return Object.entries(degrees).map(([degree, isOffered]) => (
 			<li key={degree}>
@@ -71,6 +76,7 @@ const UniversityPage = ({ params }) => {
 			</li>
 		));
 	};
+
 	return (
 		<div className="container mx-auto p-4">
 			<h1 className="text-4xl font-bold mb-4">{universityData.university_name}</h1>
@@ -87,23 +93,17 @@ const UniversityPage = ({ params }) => {
 				))}
 			</div>
 			{/* Tab content */}
-			<div>
+			<div className="relative">
 				{activeTab === "Overview" && (
-					<>
-						<div>
-							{/* Render overview content here */}
-							{/* Since overview should show everything, you can iterate over each key in the data */}
-							{Object.keys(universityData).map((key) => {
-								if (key === "_id") return null; // skip id
-								return (
-									<div key={key}>
-										<h2 className="text-2xl font-semibold mt-2">{key.replace("_", " ")}</h2>
-										<p>{JSON.stringify(universityData[key], null, 2)}</p>
-									</div>
-								);
-							})}
+					<div className="mt-5 absolute left-[20%]">
+						<div className="flex gap-5 justify-center items-center">
+							<OverviewCard data={10} type={'topPrograms'} />
+							<OverviewCard data={20} type={'programCount'} />
 						</div>
-					</>
+						<div className="ml-52 mt-10">
+							<DegreesPieChart />
+						</div>
+					</div>
 				)}
 				{activeTab === "Programs" && (
 					<div className="relative overflow-x-auto">
