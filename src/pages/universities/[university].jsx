@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
-//import { getDegreeCounts , getProgramCount , getTop5Programs } from "@/utils/programs";
+import Image from "next/image";
 import "@/app/globals.css";
 
 import Accordian from "@/components/Accordian";
 import DegreesPieChart from "@/components/DegreesPieChart";
 import OverviewCard from "@/components/OverviewCard";
+import ScholarshipTable from "@/components/ScholarshipTable";
 
 const tabs = ["Overview", "Programs", "Academic Fields", "Admissions", "Scholarships"];
 
@@ -16,7 +17,7 @@ const UniversityPage = () => {
 	const [universityData, setUniversityData] = useState({});
 	const [admissionsData, setAdmissionsData] = useState({});
 	const [scholarshipsData, setScholarshipsData] = useState({});
-	
+	const [loading, setLoading] = useState(true);
 
 	const tickRef = useRef(
 		<svg
@@ -55,32 +56,31 @@ const UniversityPage = () => {
 	);
 
 	// Fetch university data when the component mounts or when the active tab changes
+	const fetchUniversityData = async () => {
+		setLoading(true);
+		const response = await fetch(`/api/universities?name=${encodeURIComponent(university)}`);
+		const data = await response.json();
+		setUniversityData(data);
+
+		// Now that we have the university data, we can fetch admissions and scholarships data
+		const admissionsResponse = await fetch(`/api/admissions?name=${encodeURIComponent(university)}`);
+		const admissionsData = await admissionsResponse.json();
+		setAdmissionsData(admissionsData);
+
+		const scholarshipsResponse = await fetch(`/api/scholarships?name=${encodeURIComponent(university)}`);
+		const scholarshipsData = await scholarshipsResponse.json();
+		setScholarshipsData(scholarshipsData);
+		setLoading(false);
+	};
+
 	useEffect(() => {
 		if (!university) return;
-	  
-		const fetchUniversityData = async () => {
-		  const response = await fetch(`/api/universities?name=${encodeURIComponent(university)}`);
-		  const data = await response.json();
-		  setUniversityData(data);
-	  
-		  // Now that we have the university data, we can fetch admissions and scholarships data
-		  const admissionsResponse = await fetch(`/api/admissions?name=${encodeURIComponent(university)}`);
-		  const admissionsData = await admissionsResponse.json();
-		  setAdmissionsData(admissionsData);
-	  
-		  const scholarshipsResponse = await fetch(`/api/scholarships?name=${encodeURIComponent(university)}`);
-		  const scholarshipsData = await scholarshipsResponse.json();
-		  setScholarshipsData(scholarshipsData);
-		};
-	  
 		fetchUniversityData().catch(console.error);
-	  }, [university]);
+	}, [university]);
 
 	// Function to handle clicking a tab
 	const handleTabClick = async (tab) => {
 		setActiveTab(tab);
-		
-		
 	};
 
 	const renderDegrees = (degrees) => {
@@ -93,7 +93,10 @@ const UniversityPage = () => {
 
 	return (
 		<div className="container mx-auto p-4">
-			<h1 className="text-4xl font-bold mb-4">{universityData.university_name}</h1>
+			<div className="absolute top-0 left-0 w-full h-full -z-10 bg-opacity-60 bg-transparent">
+				<Image src="/bg-image.png" alt="Background" layout="fill" objectFit="cover" quality={100} />
+			</div>
+			<h1 className="text-4xl font-bold mb-8 text-center">{universityData.university_name}</h1>
 			{/* Tab navigation */}
 			<div className="mb-4">
 				{tabs.map((tab, index) => (
@@ -111,15 +114,23 @@ const UniversityPage = () => {
 				{activeTab === "Overview" && (
 					<div className="mt-5 absolute left-[20%]">
 						<div className="flex gap-5 justify-center items-center">
-							<OverviewCard data={universityData?.programs?.filter(program => 
-          program.degrees_offered.Bachelor && program.degrees_offered.Master && program.degrees_offered.Doctoral)
-          .slice(0, 5)
-          .map(program => program.field_of_study)
-          .join(', ')} type={'topPrograms'} />
-							<OverviewCard data={universityData?.programs?.length} type={'programCount'} />
+							<OverviewCard
+								data={universityData?.programs
+									?.filter(
+										(program) =>
+											program.degrees_offered.Bachelor &&
+											program.degrees_offered.Master &&
+											program.degrees_offered.Doctoral
+									)
+									.slice(0, 5)
+									.map((program) => program.field_of_study)
+									.join(", ")}
+								type={"topPrograms"}
+							/>
+							<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
 						</div>
-						<div className="ml-52 mt-10">
-							<DegreesPieChart universityData={universityData}/>
+						<div className="ml-16 mt-6">
+							<DegreesPieChart universityData={universityData} />
 						</div>
 					</div>
 				)}
@@ -163,15 +174,15 @@ const UniversityPage = () => {
 				)}
 				{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
 				{activeTab === "Admissions" && (
-  <div className="json-container">
-    <pre>{JSON.stringify(admissionsData, null, 2)}</pre>
-  </div>
-) 
-				}
-				{activeTab === "Scholarships"&& (
-  <div className="json-container">
-    <pre>{JSON.stringify(scholarshipsData, null, 2)}</pre>
-  </div>) }
+					<div className="json-container">
+						<pre>{JSON.stringify(admissionsData, null, 2)}</pre>
+					</div>
+				)}
+				{activeTab === "Scholarships" && (
+					<div className="json-container">
+						<ScholarshipTable data={scholarshipsData} />
+					</div>
+				)}
 			</div>
 		</div>
 	);
