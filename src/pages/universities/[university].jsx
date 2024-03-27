@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
-import { getDegreeCounts , getProgramCount , getTop5Programs } from "@/utils/programs";
+//import { getDegreeCounts , getProgramCount , getTop5Programs } from "@/utils/programs";
 import "@/app/globals.css";
 
 import Accordian from "@/components/Accordian";
 import DegreesPieChart from "@/components/DegreesPieChart";
 import OverviewCard from "@/components/OverviewCard";
 
-const tabs = ["Overview", "Programs", "Academic Fields"];
+const tabs = ["Overview", "Programs", "Academic Fields", "Admissions", "Scholarships"];
 
 const UniversityPage = () => {
 	const router = useRouter();
@@ -97,8 +97,12 @@ const UniversityPage = () => {
 				{activeTab === "Overview" && (
 					<div className="mt-5 absolute left-[20%]">
 						<div className="flex gap-5 justify-center items-center">
-							<OverviewCard data={10} type={'topPrograms'} />
-							<OverviewCard data={20} type={'programCount'} />
+							<OverviewCard data={universityData?.programs?.filter(program => 
+          program.degrees_offered.Bachelor && program.degrees_offered.Master && program.degrees_offered.Doctoral)
+          .slice(0, 5)
+          .map(program => program.field_of_study)
+          .join(', ')} type={'topPrograms'} />
+							<OverviewCard data={universityData?.programs?.length} type={'programCount'} />
 						</div>
 						<div className="ml-52 mt-10">
 							<DegreesPieChart />
@@ -144,6 +148,28 @@ const UniversityPage = () => {
 					</div>
 				)}
 				{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
+				{activeTab === "Admissions" && (
+					<div className="mt-5 absolute left-[20%]">
+						<div className="flex gap-5 justify-center items-center">
+							<OverviewCard data={10} type={'topPrograms'} />
+							<OverviewCard data={20} type={'programCount'} />
+						</div>
+						<div className="ml-52 mt-10">
+							<DegreesPieChart />
+						</div>
+					</div>
+				)}
+				{activeTab === "Scholarships" && (
+					<div className="mt-5 absolute left-[20%]">
+						<div className="flex gap-5 justify-center items-center">
+							<OverviewCard data={10} type={'topPrograms'} />
+							<OverviewCard data={20} type={'programCount'} />
+						</div>
+						<div className="ml-52 mt-10">
+							<DegreesPieChart />
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);

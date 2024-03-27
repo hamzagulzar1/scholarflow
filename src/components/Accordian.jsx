@@ -13,27 +13,33 @@ const Accordian = ({ universityData }) => {
 	console.log(universityData);
 
 	const getListOfFields = (fieldsString) => {
-		return fieldsString.split(", ").map((field, index) => (
+		// Check if fieldsString is a string and not undefined
+		if (typeof fieldsString === 'string') {
+		  return fieldsString.split(", ").map((field, index) => (
 			<li key={index} className="flex items-center space-x-3 rtl:space-x-reverse">
-				<svg
-					className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 16 12"
-				>
-					<path
-						stroke="currentColor"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						strokeWidth="2"
-						d="M1 5.917 5.724 10.5 15 1.5"
-					/>
-				</svg>
-				<span>{field}</span>
+			  <svg
+				className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 16 12"
+			  >
+				<path
+				  stroke="currentColor"
+				  strokeLinecap="round"
+				  strokeLinejoin="round"
+				  strokeWidth="2"
+				  d="M1 5.917 5.724 10.5 15 1.5"
+				/>
+			  </svg>
+			  <span>{field}</span>
 			</li>
-		));
-	};
+		  ));
+		} else {
+		  // Return an empty array or any other default value
+		  return []; // or [<li key="none">No fields available</li>]
+		}
+	  };
 
 	return (
 		<div id="accordion-open" data-accordion="open">

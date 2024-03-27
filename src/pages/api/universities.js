@@ -14,7 +14,8 @@ async function handler(req, res) {
   try {
     await client.connect();
     const database = client.db('test');
-    const collection = database.collection('test1');
+    const collection = database.collection('programs')
+    
     
     // Assuming `university_name` is the field in your documents
     const query = { university_name: name };

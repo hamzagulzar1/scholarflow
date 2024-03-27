@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const collection = await getCollection('test1');
+    const collection = await getCollection('programs');
     const regex = new RegExp(`^${term}`, 'i'); // Starts with the term, case-insensitive
     const predictions = await collection.find(
       { university_name: regex },
