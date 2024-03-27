@@ -14,7 +14,12 @@ async function handler(req, res) {
 
     // Replace this logic with the appropriate Jaccard similarity check
     // This is a placeholder for the actual implementation
-    const query = { university_name: { $regex: name, $options: 'i' } };
+    const query = {
+        $or: [
+          { 'result.university_name': name },
+          { 'result.university_name': { $regex: name, $options: 'i' } }
+        ]
+      };
     const admissionsData = await collection.findOne(query);
 
     if (!admissionsData) {
