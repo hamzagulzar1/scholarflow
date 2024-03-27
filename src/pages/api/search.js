@@ -1,5 +1,4 @@
-// C:\Users\Gulzar\scholarflow2\src\pages\api\search.js
-import { getCollection } from '../../lib/mongodb';
+import { getCollection } from '@/lib/mongodb';
 
 export default async function handler(req, res) {
   const { term } = req.query;
