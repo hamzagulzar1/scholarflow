@@ -14,6 +14,9 @@ const UniversityPage = () => {
 	const { university } = router.query;
 	const [activeTab, setActiveTab] = useState(tabs[0]);
 	const [universityData, setUniversityData] = useState({});
+	const [admissionsData, setAdmissionsData] = useState({});
+	const [scholarshipsData, setScholarshipsData] = useState({});
+	
 
 	const tickRef = useRef(
 		<svg
@@ -54,19 +57,30 @@ const UniversityPage = () => {
 	// Fetch university data when the component mounts or when the active tab changes
 	useEffect(() => {
 		if (!university) return;
-
+	  
 		const fetchUniversityData = async () => {
-			const response = await fetch(`/api/universities?name=${encodeURIComponent(university)}`);
-			const data = await response.json();
-			setUniversityData(data);
+		  const response = await fetch(`/api/universities?name=${encodeURIComponent(university)}`);
+		  const data = await response.json();
+		  setUniversityData(data);
+	  
+		  // Now that we have the university data, we can fetch admissions and scholarships data
+		  const admissionsResponse = await fetch(`/api/admissions?name=${encodeURIComponent(university)}`);
+		  const admissionsData = await admissionsResponse.json();
+		  setAdmissionsData(admissionsData);
+	  
+		  const scholarshipsResponse = await fetch(`/api/scholarships?name=${encodeURIComponent(university)}`);
+		  const scholarshipsData = await scholarshipsResponse.json();
+		  setScholarshipsData(scholarshipsData);
 		};
-
-		fetchUniversityData();
-	}, [university]);
+	  
+		fetchUniversityData().catch(console.error);
+	  }, [university]);
 
 	// Function to handle clicking a tab
-	const handleTabClick = (tab) => {
+	const handleTabClick = async (tab) => {
 		setActiveTab(tab);
+		
+		
 	};
 
 	const renderDegrees = (degrees) => {
@@ -149,27 +163,15 @@ const UniversityPage = () => {
 				)}
 				{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
 				{activeTab === "Admissions" && (
-					<div className="mt-5 absolute left-[20%]">
-						<div className="flex gap-5 justify-center items-center">
-							<OverviewCard data={10} type={'topPrograms'} />
-							<OverviewCard data={20} type={'programCount'} />
-						</div>
-						<div className="ml-52 mt-10">
-							<DegreesPieChart />
-						</div>
-					</div>
-				)}
-				{activeTab === "Scholarships" && (
-					<div className="mt-5 absolute left-[20%]">
-						<div className="flex gap-5 justify-center items-center">
-							<OverviewCard data={10} type={'topPrograms'} />
-							<OverviewCard data={20} type={'programCount'} />
-						</div>
-						<div className="ml-52 mt-10">
-							<DegreesPieChart />
-						</div>
-					</div>
-				)}
+  <div className="json-container">
+    <pre>{JSON.stringify(admissionsData, null, 2)}</pre>
+  </div>
+) 
+				}
+				{activeTab === "Scholarships"&& (
+  <div className="json-container">
+    <pre>{JSON.stringify(scholarshipsData, null, 2)}</pre>
+  </div>) }
 			</div>
 		</div>
 	);
