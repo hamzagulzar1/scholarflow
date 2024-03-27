@@ -105,7 +105,7 @@ const UniversityPage = () => {
 							<OverviewCard data={universityData?.programs?.length} type={'programCount'} />
 						</div>
 						<div className="ml-52 mt-10">
-							<DegreesPieChart />
+							<DegreesPieChart universityData={universityData}/>
 						</div>
 					</div>
 				)}
