@@ -92,97 +92,100 @@ const UniversityPage = () => {
 	};
 
 	return (
-		<div className="container mx-auto p-4">
+		<div className="min-h-screen relative">
 			<div className="absolute top-0 left-0 w-full h-full -z-10 bg-opacity-60 bg-transparent">
 				<Image src="/bg-image.png" alt="Background" layout="fill" objectFit="cover" quality={100} />
 			</div>
-			<h1 className="text-4xl font-bold mb-8 text-center">{universityData.university_name}</h1>
-			{/* Tab navigation */}
-			<div className="mb-4">
-				{tabs.map((tab, index) => (
-					<button
-						key={index}
-						className={`px-4 py-2 mr-2 ${activeTab === tab ? "text-blue-500 border-b-2 border-blue-500" : ""}`}
-						onClick={() => handleTabClick(tab)}
-					>
-						{tab}
-					</button>
-				))}
-			</div>
-			{/* Tab content */}
-			<div className="relative">
-				{activeTab === "Overview" && (
-					<div className="mt-5 absolute left-[20%]">
-						<div className="flex gap-5 justify-center items-center">
-							<OverviewCard
-								data={universityData?.programs
-									?.filter(
-										(program) =>
-											program.degrees_offered.Bachelor &&
-											program.degrees_offered.Master &&
-											program.degrees_offered.Doctoral
-									)
-									.slice(0, 5)
-									.map((program) => program.field_of_study)
-									.join(", ")}
-								type={"topPrograms"}
-							/>
-							<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
+			<div className="container mx-auto p-4">
+				<h1 className="text-4xl font-bold mb-8 text-center">{universityData.university_name}</h1>
+				<div className="mb-4">
+					{tabs.map((tab, index) => (
+						<button
+							key={index}
+							className={`px-4 py-2 mr-2 ${activeTab === tab ? "text-blue-500 border-b-2 border-blue-500" : ""}`}
+							onClick={() => handleTabClick(tab)}
+						>
+							{tab}
+						</button>
+					))}
+				</div>
+
+				<div className="relative">
+					{activeTab === "Overview" && (
+						<div className="mt-5 absolute left-[20%]">
+							<div className="flex gap-5 justify-center items-center">
+								<OverviewCard
+									data={universityData?.programs
+										?.filter(
+											(program) =>
+												program.degrees_offered.Bachelor &&
+												program.degrees_offered.Master &&
+												program.degrees_offered.Doctoral
+										)
+										.slice(0, 5)
+										.map((program) => program.field_of_study)
+										.join(", ")}
+									type={"topPrograms"}
+								/>
+								<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
+							</div>
+							<div className="ml-16 mt-6">
+								<DegreesPieChart universityData={universityData} />
+							</div>
 						</div>
-						<div className="ml-16 mt-6">
-							<DegreesPieChart universityData={universityData} />
-						</div>
-					</div>
-				)}
-				{activeTab === "Programs" && (
-					<div className="relative overflow-x-auto">
-						<table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-							<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-								<tr>
-									<th scope="col" className="px-6 py-3">
-										Programs Offered
-									</th>
-									<th scope="col" className="px-6 py-3">
-										Bachelors
-									</th>
-									<th scope="col" className="px-6 py-3">
-										Masters
-									</th>
-									<th scope="col" className="px-6 py-3">
-										PHD
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{universityData.programs?.map((program, index) => (
-									<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-										<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-											{program.field_of_study}
+					)}
+					{activeTab === "Programs" && (
+						<div className="relative overflow-x-auto">
+							<table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+								<thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+									<tr>
+										<th scope="col" className="px-6 py-3">
+											Programs Offered
 										</th>
-										<td className="px-6 py-4">
-											{program.degrees_offered.Bachelor ? tickRef.current : crossRef.current}
-										</td>
-										<td className="px-6 py-4">{program.degrees_offered.Master ? tickRef.current : crossRef.current}</td>
-										<td className="px-6 py-4">
-											{program.degrees_offered.Doctoral ? tickRef.current : crossRef.current}
-										</td>
+										<th scope="col" className="px-6 py-3">
+											Bachelors
+										</th>
+										<th scope="col" className="px-6 py-3">
+											Masters
+										</th>
+										<th scope="col" className="px-6 py-3">
+											PHD
+										</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
-				{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
-				{activeTab === "Admissions" && (
-					<div className="json-container">
-						<pre>{JSON.stringify(admissionsData, null, 2)}</pre>
-					</div>
-				)}
-				{activeTab === "Scholarships" && (
-					<div className="json-container">
-						<ScholarshipTable data={scholarshipsData} />
-					</div>
-				)}
+								</thead>
+								<tbody>
+									{universityData.programs?.map((program, index) => (
+										<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+											<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+												{program.field_of_study}
+											</th>
+											<td className="px-6 py-4">
+												{program.degrees_offered.Bachelor ? tickRef.current : crossRef.current}
+											</td>
+											<td className="px-6 py-4">
+												{program.degrees_offered.Master ? tickRef.current : crossRef.current}
+											</td>
+											<td className="px-6 py-4">
+												{program.degrees_offered.Doctoral ? tickRef.current : crossRef.current}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					)}
+					{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
+					{activeTab === "Admissions" && (
+						<div className="json-container">
+							<pre>{JSON.stringify(admissionsData, null, 2)}</pre>
+						</div>
+					)}
+					{activeTab === "Scholarships" && (
+						<div className="json-container">
+							<ScholarshipTable data={scholarshipsData} />
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);
