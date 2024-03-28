@@ -132,6 +132,7 @@ const UniversityPage = () => {
 										type={"topPrograms"}
 									/>
 									<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
+									<OverviewCard data={scholarshipsData?.scholarships?.length || 0} type="totalScholarships" />
 								</div>
 								<DegreesPieChart universityData={universityData} />
 							</div>
