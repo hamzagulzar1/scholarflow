@@ -8,6 +8,7 @@ import DegreesPieChart from "@/components/DegreesPieChart";
 import OverviewCard from "@/components/OverviewCard";
 import ScholarshipTable from "@/components/ScholarshipTable";
 import AdmissionsAccordion from "@/components/AdmissionsAccordion";
+import Navbar from "@/components/Navbar";
 
 const tabs = ["Overview", "Programs", "Academic Fields", "Admissions", "Scholarships"];
 
@@ -22,7 +23,7 @@ const UniversityPage = () => {
 
 	const tickRef = useRef(
 		<svg
-			class="w-3 h-3 text-green-500"
+			className="w-3 h-3 text-green-500"
 			aria-hidden="true"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
@@ -30,9 +31,9 @@ const UniversityPage = () => {
 		>
 			<path
 				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="2"
 				d="M1 5.917 5.724 10.5 15 1.5"
 			/>
 		</svg>
@@ -40,7 +41,7 @@ const UniversityPage = () => {
 
 	const crossRef = useRef(
 		<svg
-			class="w-3 h-3 text-red-500"
+			className="w-3 h-3 text-red-500"
 			aria-hidden="true"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
@@ -48,9 +49,9 @@ const UniversityPage = () => {
 		>
 			<path
 				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth="2"
 				d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
 			/>
 		</svg>
@@ -94,7 +95,8 @@ const UniversityPage = () => {
 
 	return (
 		<div className="min-h-screen relative">
-			<div className="absolute top-0 left-0 w-full h-full -z-10 bg-opacity-60 bg-transparent">
+			<Navbar />
+			<div className="fixed top-0 left-0 w-full h-full -z-10 bg-opacity-60 bg-transparent">
 				<Image src="/bg-image.png" alt="Background" layout="fill" objectFit="cover" quality={100} />
 			</div>
 			<div className="container mx-auto p-4">
@@ -156,7 +158,7 @@ const UniversityPage = () => {
 								</thead>
 								<tbody>
 									{universityData.programs?.map((program, index) => (
-										<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+										<tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 											<th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 												{program.field_of_study}
 											</th>
