@@ -116,8 +116,8 @@ const UniversityPage = () => {
 				<div className="relative">
 					{activeTab === "Overview" && (
 						<div className="mt-5 absolute left-[10%]">
-							<div className="flex gap-5 justify-center items-center">
-								<div className="flex flex-col gap-4">
+							<div className="flex gap-3 justify-center items-center mb-10">
+								<div className="flex flex-col gap-3">
 									<OverviewCard
 										data={universityData?.programs
 											?.filter(
@@ -131,8 +131,10 @@ const UniversityPage = () => {
 											.join(", ")}
 										type={"topPrograms"}
 									/>
-									<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
-									<OverviewCard data={scholarshipsData?.scholarships?.length || 0} type="totalScholarships" />
+									<div className="flex gap-2">
+										<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
+										<OverviewCard data={scholarshipsData?.scholarships?.length || 0} type="totalScholarships" />
+									</div>
 								</div>
 								<DegreesPieChart universityData={universityData} />
 							</div>
@@ -179,9 +181,7 @@ const UniversityPage = () => {
 						</div>
 					)}
 					{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
-					{activeTab === "Admissions" && (
-  <AdmissionsAccordion admissionsData={admissionsData} />
-)}
+					{activeTab === "Admissions" && <AdmissionsAccordion admissionsData={admissionsData} />}
 					{activeTab === "Scholarships" && (
 						<div className="json-container">
 							<ScholarshipTable data={scholarshipsData} />
