@@ -10,8 +10,6 @@ const Accordian = ({ universityData }) => {
 	const toggleTab2 = () => setIsOpenTab2(!isOpenTab2);
 	const toggleTab3 = () => setIsOpenTab3(!isOpenTab3);
 
-	console.log(universityData);
-
 	const getListOfFields = (fieldsString) => {
 		// Check if fieldsString is a string and not undefined
 		if (typeof fieldsString === "string") {
