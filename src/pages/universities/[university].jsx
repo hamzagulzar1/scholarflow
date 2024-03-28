@@ -7,6 +7,7 @@ import Accordian from "@/components/Accordian";
 import DegreesPieChart from "@/components/DegreesPieChart";
 import OverviewCard from "@/components/OverviewCard";
 import ScholarshipTable from "@/components/ScholarshipTable";
+import AdmissionsAccordion from "@/components/AdmissionsAccordion";
 
 const tabs = ["Overview", "Programs", "Academic Fields", "Admissions", "Scholarships"];
 
@@ -176,10 +177,8 @@ const UniversityPage = () => {
 					)}
 					{activeTab === "Academic Fields" && <Accordian universityData={universityData} />}
 					{activeTab === "Admissions" && (
-						<div className="json-container">
-							<pre>{JSON.stringify(admissionsData, null, 2)}</pre>
-						</div>
-					)}
+  <AdmissionsAccordion admissionsData={admissionsData} />
+)}
 					{activeTab === "Scholarships" && (
 						<div className="json-container">
 							<ScholarshipTable data={scholarshipsData} />
