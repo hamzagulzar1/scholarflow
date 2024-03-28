@@ -10,11 +10,11 @@ const OverviewCard = ({ data, type }) => {
 				<MdOutlineCastForEducation size={40} color="white" />
 			)}
 			<div className="mt-4">
-				<h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+				<h5 className="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
 					{type == "programCount" ? "Total Programs Offered" : "Top 5 Programs Across BS,MS,PhD"}
 				</h5>
 			</div>
-			<p className="mb-3 font-normal text-gray-500 dark:text-gray-400">{data}</p>
+			<p className="mb-3 font-semibold text-xl text-white">{data} Programs</p>
 		</div>
 	);
 };

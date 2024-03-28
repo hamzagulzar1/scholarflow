@@ -114,24 +114,24 @@ const UniversityPage = () => {
 
 				<div className="relative">
 					{activeTab === "Overview" && (
-						<div className="mt-5 absolute left-[20%]">
+						<div className="mt-5 absolute left-[10%]">
 							<div className="flex gap-5 justify-center items-center">
-								<OverviewCard
-									data={universityData?.programs
-										?.filter(
-											(program) =>
-												program.degrees_offered.Bachelor &&
-												program.degrees_offered.Master &&
-												program.degrees_offered.Doctoral
-										)
-										.slice(0, 5)
-										.map((program) => program.field_of_study)
-										.join(", ")}
-									type={"topPrograms"}
-								/>
-								<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
-							</div>
-							<div className="ml-16 mt-6">
+								<div className="flex flex-col gap-4">
+									<OverviewCard
+										data={universityData?.programs
+											?.filter(
+												(program) =>
+													program.degrees_offered.Bachelor &&
+													program.degrees_offered.Master &&
+													program.degrees_offered.Doctoral
+											)
+											.slice(0, 5)
+											.map((program) => program.field_of_study)
+											.join(", ")}
+										type={"topPrograms"}
+									/>
+									<OverviewCard data={universityData?.programs?.length} type={"programCount"} />
+								</div>
 								<DegreesPieChart universityData={universityData} />
 							</div>
 						</div>
