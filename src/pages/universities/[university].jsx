@@ -9,8 +9,10 @@ import OverviewCard from "@/components/OverviewCard";
 import ScholarshipTable from "@/components/ScholarshipTable";
 import AdmissionsAccordion from "@/components/AdmissionsAccordion";
 import Navbar from "@/components/Navbar";
+import AdvancedSearch from "@/components/AdvancedSearch"; 
 
-const tabs = ["Overview", "Programs", "Academic Fields", "Admissions", "Scholarships"];
+
+const tabs = ["Overview", "Programs", "Academic Fields", "Admissions", "Scholarships", "Advanced Search"];
 
 const UniversityPage = () => {
 	const router = useRouter();
@@ -187,6 +189,10 @@ const UniversityPage = () => {
 							<ScholarshipTable data={scholarshipsData} />
 						</div>
 					)}
+					{activeTab === "Advanced Search" && (
+  <AdvancedSearch universityName={universityData.university_name} />
+)}
+
 				</div>
 			</div>
 		</div>
